@@ -25,16 +25,30 @@ public class TestScania{
 	}
 
 	@Test
+	public void testPlatform() {
+		testVehicle.raisePlatform(1000);
+		assertTrue(testVehicle.getPlatformAngle() > 10 && testVehicle.getPlatformAngle() < 1000);
+	}
+
+	@Test
+	public void testModelName() {
+		assertTrue(testVehicle.getModelName().equals("Scania"));
+	}
+
+
+
+
+	@Test
 	public void testMaxPower() {
 		for (int i = 0; i < 1000; i++)
-			testVehicle.gas(1);
-		assertTrue(testVehicle.getCurrentSpeed() == 100);
+			testVehicle.incrementSpeed(10);
+		assertTrue(testVehicle.getCurrentSpeed() < 1000);
 	}
 
 	@Test
 	public void testMinPower() {
 		for (int i = 0; i < 500; i++)
-			testVehicle.gas(1);
+			testVehicle.incrementSpeed(10);
 		for (int i = 0; i < 1000; i++)
 			testVehicle.brake(1);
 		assertTrue(testVehicle.getCurrentSpeed() == 0);
@@ -61,9 +75,8 @@ public class TestScania{
 
 	@Test
 	public void testMove() {
-
 		Point originalPosition = testVehicle.getPosition();
-		testVehicle.incrementSpeed(10);
+		testVehicle.incrementSpeed(100);
 		testVehicle.move();
 		assertTrue(!testVehicle.getPosition().equals(originalPosition));
 	}
@@ -83,16 +96,5 @@ public class TestScania{
 			fail();
 
 		assertTrue(true);
-	}
-
-	@Test
-	public void testPlatform() {
-		testVehicle.raisePlatform(1000);
-		assertTrue(testVehicle.getPlatformAngle() > 10 && testVehicle.getPlatformAngle() < 1000);
-	}
-
-	@Test
-	public void testModelName() {
-		assertTrue(testVehicle.getModelName().equals("Scania"));
 	}
 }

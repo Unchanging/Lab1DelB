@@ -1,5 +1,8 @@
 import java.awt.*;
 
 public interface Car extends GeneralVehicle{
-	void gas(double amount);
+	/** Should return the number of doors of the vehicle.
+	 * @return The number of doors of the vehicle
+	 */
+	int getNrDoors();
 }

@@ -1,25 +1,25 @@
 import java.util.Iterator;
 
-public class RepairShop<typeOfVehicles extends GeneralVehicle> implements VehicleStorer<typeOfVehicles>{
+public class RepairShop<typeOfVehicles extends GeneralVehicle> implements Storer<typeOfVehicles> {
 
-	private VehicleStorage<typeOfVehicles> vehicleStorage;
+	private UnitStorage<typeOfVehicles> vehicleStorage;
 
 	public RepairShop(int maxNrOfVehicles) {
-		vehicleStorage = new VehicleStorage<>(maxNrOfVehicles);
+		vehicleStorage = new UnitStorage<>(maxNrOfVehicles);
 	}
 
 	public typeOfVehicles retrieveVehicle(String modelName){
-		return vehicleStorage.retrieveVehicle(modelName);
+		return vehicleStorage.retrieveUnit(modelName);
 	}
 
 	@Override
-	public void addVehicle(typeOfVehicles vehicle) {
-		vehicleStorage.addVehicle(vehicle);
+	public void addUnit(typeOfVehicles vehicle) {
+		vehicleStorage.addUnit(vehicle);
 	}
 
 	@Override
-	public typeOfVehicles unloadVehicle() {
-		return vehicleStorage.unloadFirstVehicle();
+	public typeOfVehicles unloadUnit() {
+		return vehicleStorage.unloadFirstUnit();
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class RepairShop<typeOfVehicles extends GeneralVehicle> implements Vehicl
 	}
 
 	@Override
-	public int getNrOfVehicles() {
-		return vehicleStorage.getNrOfVehicles();
+	public int getNrOfUnits() {
+		return vehicleStorage.getNrOfUnits();
 	}
 }

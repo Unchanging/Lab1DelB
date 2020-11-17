@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -5,41 +6,15 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
-public class TestSaab{
 
-	private Saab95 testVehicle;
+public class TestSharedBehaviour {
+
+	private GeneralVehicle testVehicle;
 
 	@Before
 	public void init() {
-		testVehicle = new Saab95();
+		testVehicle = new Ferry<Car>(30);
 	}
-
-	@Test
-	public void testNrDoors() {
-		assertTrue(testVehicle.getNrDoors() == 2);
-	}
-
-	@Test
-	public void testEnginePower() {
-		assertTrue(testVehicle.getEnginePower() == 125);
-	}
-
-
-	@Test
-	public void testSaabSpeedFactor() {
-		testVehicle.setTurboOn();
-		double initialSpeedFactor = testVehicle.speedFactor();
-		testVehicle.setTurboOff();
-		assertTrue(initialSpeedFactor > testVehicle.speedFactor());
-	}
-
-	@Test
-	public void testModelName() {
-		assertTrue(testVehicle.getModelName().equals("Saab95"));
-	}
-
-
-
 
 	@Test
 	public void testMaxPower() {

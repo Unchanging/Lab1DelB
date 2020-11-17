@@ -25,16 +25,31 @@ public class TestVolvo{
 	}
 
 	@Test
+	public void testVolvoSpeedfactor() {
+		double volvoFactor = 1.25*0.01*100;
+		assertEquals(testVehicle.speedFactor(), volvoFactor, 0.001);
+	}
+
+	@Test
+	public void testModelName() {
+		assertTrue(testVehicle.getModelName().equals("Volvo240"));
+	}
+
+
+
+
+
+	@Test
 	public void testMaxPower() {
 		for (int i = 0; i < 1000; i++)
-			testVehicle.gas(1);
-		assertTrue(testVehicle.getCurrentSpeed() == 100);
+			testVehicle.incrementSpeed(10);
+		assertTrue(testVehicle.getCurrentSpeed() < 1000);
 	}
 
 	@Test
 	public void testMinPower() {
 		for (int i = 0; i < 500; i++)
-			testVehicle.gas(1);
+			testVehicle.incrementSpeed(10);
 		for (int i = 0; i < 1000; i++)
 			testVehicle.brake(1);
 		assertTrue(testVehicle.getCurrentSpeed() == 0);
@@ -61,9 +76,8 @@ public class TestVolvo{
 
 	@Test
 	public void testMove() {
-
 		Point originalPosition = testVehicle.getPosition();
-		testVehicle.incrementSpeed(10);
+		testVehicle.incrementSpeed(100);
 		testVehicle.move();
 		assertTrue(!testVehicle.getPosition().equals(originalPosition));
 	}
@@ -83,16 +97,5 @@ public class TestVolvo{
 			fail();
 
 		assertTrue(true);
-	}
-
-	@Test
-	public void testVolvoSpeedfactor() {
-		double volvoFactor = 1.25*0.01*100;
-		assertEquals(testVehicle.speedFactor(), volvoFactor, 0.001);
-	}
-
-	@Test
-	public void testModelName() {
-		assertTrue(testVehicle.getModelName().equals("Volvo240"));
 	}
 }

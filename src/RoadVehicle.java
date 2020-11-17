@@ -7,32 +7,8 @@ public class RoadVehicle {
 	 * Represents the number of doors of the  vehicle.
 	 */
 	private int nrDoors; // Number of doors on the vehicle
-	/**
-	 * Represents the engine power of the vehicle.
-	 */
-	private double enginePower; // Engine power of the vehicle
-	/**
-	 * Represents the current speed of the vehicle.
-	 */
-	private double currentSpeed; // The current speed of the vehicle
-	/**
-	 * Represents the color of the vehicle.
-	 */
-	private Color color; // Color of the vehicle
-	/**
-	 * Represents the current position of the vehicle.
-	 */
-	private Point position; // current position
-	/**
-	 * Represents the current heading of the vehicle.
-	 */
-	private double heading; // current heading in radians
-
-	/**
-	 * Represents the vehicle model name.
-	 */
-	private String modelName; // The vehicle model name
 	private GeneralVehicle generalVehicle;
+	private Vehicle vehicleModel;
 
 	/**
 	 * A constructor used by the constructor of specific vehicles to model the road behaviours of those vehicles
@@ -40,13 +16,10 @@ public class RoadVehicle {
 	public RoadVehicle(GeneralVehicle generalVehicle, int nrDoors, Color color, double enginePower, String modelName) {
 
 		this.generalVehicle = generalVehicle;
-		this.nrDoors = nrDoors;
-		this.color = color;
-		this.enginePower = enginePower;
-		this.modelName = modelName;
 
-		position = new Point();
-		heading = 0;
+		vehicleModel = new Vehicle(generalVehicle, color, enginePower, modelName);
+
+		this.nrDoors = nrDoors;
 	}
 
 	/**Returns the number of doors of the vehicle.
@@ -60,7 +33,7 @@ public class RoadVehicle {
 	 * @return The engine power of the vehicle.
 	 */
 	public double getEnginePower(){
-		return enginePower;
+		return vehicleModel.getEnginePower();
 	}
 
 
@@ -68,7 +41,7 @@ public class RoadVehicle {
 	 * @return The model name of the vehicle.
 	 */
 	public String getModelName() {
-		return modelName;
+		return vehicleModel.getModelName();
 	}
 
 
@@ -76,7 +49,7 @@ public class RoadVehicle {
 	 * @return The current speed of the vehicle.
 	 */
 	public double getCurrentSpeed(){
-		return currentSpeed;
+		return vehicleModel.getCurrentSpeed();
 	}
 
 
@@ -84,7 +57,7 @@ public class RoadVehicle {
 	 * @return The color of the vehicle.
 	 */
 	public Color getColor(){
-		return color;
+		return vehicleModel.getColor();
 	}
 
 	/**
@@ -92,28 +65,28 @@ public class RoadVehicle {
 	 * @param clr color which is to be set.
 	 */
 	public void setColor(Color clr){
-		color = clr;
+		vehicleModel.setColor(clr);
 	}
 
 	/** Sets the speed of the vehicle
 	 * @param speed The speed of the vehicle
 	 */
 	public void setCurrentSpeed(double speed) {
-		currentSpeed = speed;
+		vehicleModel.setCurrentSpeed(speed);
 	}
 
 	/**
 	 * Starts the vehicle by setting the variable currentspeed to a positive value.
 	 */
 	public void startEngine(){
-		generalVehicle.incrementSpeed(0.1);
+		vehicleModel.startEngine();
 	}
 
 	/**
 	 * Stops the vehicle by setting the variable currentspeed to zero.
 	 */
 	public void stopEngine(){
-		currentSpeed = 0;
+		vehicleModel.stopEngine();
 	}
 
 	/**
@@ -121,7 +94,7 @@ public class RoadVehicle {
 	 * @param amount The factor by which the vehicle will increase its speed.
 	 */
 	public void incrementSpeed(double amount) {
-		currentSpeed = Math.min(getCurrentSpeed() + generalVehicle.speedFactor() * amount, enginePower);
+		vehicleModel.incrementSpeed(amount);
 	}
 
 	/**
@@ -129,7 +102,7 @@ public class RoadVehicle {
 	 * @param amount The factor by which the vehicle will decrease its speed.
 	 */
 	public void decrementSpeed(double amount) {
-		currentSpeed = Math.max(getCurrentSpeed() - generalVehicle.speedFactor() * amount, 0);
+		vehicleModel.decrementSpeed(amount);
 	}
 
 
@@ -139,10 +112,7 @@ public class RoadVehicle {
 	 * @throws RuntimeException If the input is not within the interval [0, 1].
 	 */
 	public void gas(double amount) throws RuntimeException{
-		if (amount <= 1 && amount >= 0)
-			generalVehicle.incrementSpeed(amount);
-		else
-			throw new RuntimeException("input was not in interval [0, 1]");
+		vehicleModel.gas(amount);
 	}
 
 	/**
@@ -151,35 +121,35 @@ public class RoadVehicle {
 	 * @throws RuntimeException If the input is not within the interval [0, 1].
 	 */
 	public void brake(double amount) throws RuntimeException{
-		if (amount <= 1 && amount >= 0)
-			decrementSpeed(amount);
-		else
-			throw new RuntimeException("input was not in interval [0, 1]");
+		vehicleModel.brake(amount);
 	}
 
 	/**Returns the vehicle's current position as a Point.
 	 * @return The vehicle's current position as a Point.
 	 */
 	public Point getPosition(){
-		return position.getLocation();
+		return vehicleModel.getPosition();
 	}
 
+	/** Sets the position of the vehicle
+	 * @param position The position to be set.
+	 */
 	public void setPosition(Point position) {
-		this.position = position.getLocation();
+		vehicleModel.setPosition(position);
 	}
 
 	/**Return the vehicle's current heading in radians.
 	 * @return The vehicle's current heading in radians.
 	 */
 	public double getHeading() {
-		return heading;
+		return vehicleModel.getHeading();
 	}
 
 	/**
 	 * Implements the move method from the Movable interface. Changes the vehicle's position to a position further along the current heading by a distance determined by the vehicle's current speed.
 	 */
 	public void move() {
-		position.translate((int)(Math.cos(heading)*getCurrentSpeed()), (int)(Math.sin(heading)*getCurrentSpeed()));
+		vehicleModel.move();
 	}
 
 
@@ -187,18 +157,18 @@ public class RoadVehicle {
 	 * Implements the turnLeft method from the Movable interface. Changes the vehicle's heading by half a radian to the left.
 	 */
 	public void turnLeft() {
-		heading += 0.5;
+		vehicleModel.turnLeft();
 	}
 
 	/**
 	 * Implements the turnRight method from the Movable interface. Changes the vehicle's heading by half a radian to the right.
 	 */
 	public void turnRight() {
-		heading -= 0.5;
+		vehicleModel.turnRight();
 	}
 
 	public String toString() {
-		return this.getModelName() + " at X=" + this.getPosition().getX() + ",Y=" + this.getPosition().getY()+ " with velocity " + this.getCurrentSpeed();
+		return vehicleModel.toString();
 	}
 
 }

@@ -5,39 +5,25 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
-public class TestSaab{
+public class TestFerry {
 
-	private Saab95 testVehicle;
+	private Ferry<Car> testVehicle;
 
 	@Before
 	public void init() {
-		testVehicle = new Saab95();
+		testVehicle = new Ferry<>(30);
 	}
 
 	@Test
-	public void testNrDoors() {
-		assertTrue(testVehicle.getNrDoors() == 2);
+	public void testUnload() {
+		testVehicle.addUnit(new Volvo240());
+		testVehicle.addUnit(new Saab95());
+		testVehicle.addUnit(new Volvo240());
+		testVehicle.addUnit(new Volvo240());
+
+		testVehicle.unloadUnit();
+		assertTrue(testVehicle.unloadUnit().getModelName().equals("Saab95"));
 	}
-
-	@Test
-	public void testEnginePower() {
-		assertTrue(testVehicle.getEnginePower() == 125);
-	}
-
-
-	@Test
-	public void testSaabSpeedFactor() {
-		testVehicle.setTurboOn();
-		double initialSpeedFactor = testVehicle.speedFactor();
-		testVehicle.setTurboOff();
-		assertTrue(initialSpeedFactor > testVehicle.speedFactor());
-	}
-
-	@Test
-	public void testModelName() {
-		assertTrue(testVehicle.getModelName().equals("Saab95"));
-	}
-
 
 
 

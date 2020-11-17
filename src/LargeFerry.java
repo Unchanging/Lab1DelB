@@ -1,51 +1,42 @@
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehicle, Storer<typeOfVehicle> {
+public class LargeFerry <typeOfVehicle extends GeneralVehicle> implements GeneralVehicle{
 
-	private UnitStorage<typeOfVehicle> vehicleStorage;
+	private List<FerryLane<typeOfVehicle>> listOfLanes;
 	private Vehicle vehicleModel;
 
-	public Ferry(int maxNrOfVehicles) {
-		vehicleStorage = new UnitStorage<>(maxNrOfVehicles);
-		vehicleModel = new Vehicle(this, Color.GREEN, 40, "M/V Boaty McBoatface");
+	public LargeFerry(int nrOfLanes, int maxNrOfVehicles) {
 
+		listOfLanes = new ArrayList<>();
+		for(int i = 0; i < nrOfLanes; i++) {
+			listOfLanes.add(new FerryLane<>(maxNrOfVehicles));
+		}
+
+		vehicleModel = new Vehicle(this, Color.GREEN, 40, "M/V Boaty McBigBoatface");
 	}
 
-	/**
-	 * Increases the speed of the vehicle.
-	 * @param amount The factor of the increase. Must be in the interval [0, 1].
-	 * @throws RuntimeException If the input is not within the interval [0, 1].
-	 */
-	@Override
-	public void gas(double amount) throws RuntimeException{
-		vehicleModel.gas(amount);
-	}
-
-	@Override
-	public void addUnit(typeOfVehicle vehicle) {
+	public void addUnit(int lane, typeOfVehicle vehicle) {
 		if (getPosition().distance(vehicle.getPosition()) > 10)
 			throw new RuntimeException("The vehicle is too far away from the ferry to be loaded. Max distance is 10 units");
-		vehicleStorage.addUnit(vehicle);
+		listOfLanes.get(lane).addUnit(vehicle);
 	}
 
-	@Override
-	public typeOfVehicle unloadUnit() {
-		typeOfVehicle tempVehicle = vehicleStorage.unloadFirstUnit();
+	public typeOfVehicle unloadUnit(int lane) {
+		typeOfVehicle tempVehicle = listOfLanes.get(lane).unloadFirstUnit();
 		Point tempPosition = getPosition();
 		tempPosition.translate(5, 5);
 		tempVehicle.setPosition(tempPosition);
 		return tempVehicle;
 	}
 
-	@Override
-	public Iterator<typeOfVehicle> getIterator() {
-		return vehicleStorage.getIterator();
-	}
-
-	@Override
 	public int getNrOfUnits() {
-		return vehicleStorage.getNrOfUnits();
+		int res = 0;
+		for (FerryLane lane : listOfLanes)
+			res += lane.getNrOfUnits();
+		return res;
 	}
 
 	@Override
@@ -114,6 +105,17 @@ public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehic
 	}
 
 	/**
+	 * Increases the speed of the vehicle.
+	 * @param amount The factor of the increase. Must be in the interval [0, 1].
+	 * @throws RuntimeException If the input is not within the interval [0, 1].
+	 */
+	@Override
+	public void gas(double amount) throws RuntimeException{
+		vehicleModel.gas(amount);
+	}
+
+
+	/**
 	 * Increases the speed of the vehicle up to a maximum limit of the vehicle's engine power.
 	 * @param amount The factor by which the vehicle will increase its speed.
 	 */
@@ -167,7 +169,8 @@ public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehic
 	@Override
 	public void move() {
 		vehicleModel.move();
-		vehicleStorage.updatePositions(this.getPosition());
+		for (FerryLane lane : listOfLanes)
+			lane.updatePositions(this.getPosition());
 	}
 
 

@@ -2,16 +2,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
-public class TestSaab{
+public class TestCarTransport{
 
-	private Saab95 testVehicle;
+	private CarTransport testVehicle;
 
 	@Before
 	public void init() {
-		testVehicle = new Saab95();
+		testVehicle = new CarTransport();
 	}
 
 	@Test
@@ -21,22 +22,42 @@ public class TestSaab{
 
 	@Test
 	public void testEnginePower() {
-		assertTrue(testVehicle.getEnginePower() == 125);
+		assertTrue(testVehicle.getEnginePower() == 90);
 	}
 
 
 	@Test
-	public void testSaabSpeedFactor() {
-		testVehicle.setTurboOn();
-		double initialSpeedFactor = testVehicle.speedFactor();
-		testVehicle.setTurboOff();
-		assertTrue(initialSpeedFactor > testVehicle.speedFactor());
+	public void testRamp() {
+		testVehicle.lowerRamp();
+		assertTrue(testVehicle.isRampIsDown());
 	}
 
 	@Test
 	public void testModelName() {
-		assertTrue(testVehicle.getModelName().equals("Saab95"));
+		assertTrue(testVehicle.getModelName().equals("Iveco"));
 	}
+
+	@Test
+	public void testUnload() {
+		testVehicle.lowerRamp();
+		testVehicle.addUnit(new Volvo240());
+		testVehicle.addUnit(new Volvo240());
+		testVehicle.addUnit(new Saab95());
+		testVehicle.addUnit(new Volvo240());
+
+		testVehicle.unloadUnit();
+		assertTrue(testVehicle.unloadUnit().getModelName().equals("Saab95"));
+	}
+
+	@Test
+	public void testIterator() {
+		testVehicle.lowerRamp();
+		testVehicle.addUnit(new Volvo240());
+		Iterator<Car> iterator = testVehicle.getIterator();
+
+		assertTrue(iterator.hasNext());
+	}
+
 
 
 

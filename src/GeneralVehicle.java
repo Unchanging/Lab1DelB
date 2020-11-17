@@ -1,9 +1,8 @@
 import java.awt.*;
 
-public interface GeneralVehicle extends Movable{
+public interface GeneralVehicle extends Movable, Transportable{
 
 	double speedFactor();
-	int getNrDoors();
 	double getEnginePower();
 	String getModelName();
 	double getCurrentSpeed();
@@ -13,6 +12,7 @@ public interface GeneralVehicle extends Movable{
 
 	void setColor(Color color);
 	void setPosition(Point position);
+	void gas(double amount);
 	void incrementSpeed(double amount);
 	void decrementSpeed(double amount);
 
@@ -20,4 +20,8 @@ public interface GeneralVehicle extends Movable{
 
 	void startEngine();
 	void stopEngine();
+
+	default String getIdentifier() {
+		return getModelName();
+	}
 }

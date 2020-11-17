@@ -1,17 +1,18 @@
 import java.awt.*;
 
+
+/**
+ *  A class for a Saab95
+ */
 public class Saab95 implements Car{
-	/**
-	 * Represents whether the car has its turbo on or off.
-	 */
 	private boolean turboOn;
-	private RoadVehicle carObject;
+	private RoadVehicle vehicleModel;
 
 	/**
 	 * Constructor for the Saab 95.
 	 */
 	public Saab95(){
-		carObject = new RoadVehicle(this, 2, Color.RED, 125, "Saab95");
+		vehicleModel = new RoadVehicle(this, 2, Color.RED, 125, "Saab95");
 
 		turboOn = false;
 	}
@@ -38,102 +39,163 @@ public class Saab95 implements Car{
 	public double speedFactor(){
 		double turbo = 1;
 		if(turboOn) turbo = 1.3;
-		return carObject.getEnginePower() * 0.01 * turbo;
+		return vehicleModel.getEnginePower() * 0.01 * turbo;
 	}
 
+	/**Returns the number of doors of the vehicle.
+	 * @return The number of doors of the vehicle.
+	 */
 	@Override
 	public int getNrDoors() {
-		return carObject.getNrDoors();
+		return vehicleModel.getNrDoors();
 	}
 
+	/**Returns the engine power of the vehicle.
+	 * @return The engine power of the vehicle.
+	 */
 	@Override
 	public double getEnginePower() {
-		return carObject.getEnginePower();
+		return vehicleModel.getEnginePower();
 	}
 
+	/** Returns the model name of the vehicle.
+	 * @return The model name of the vehicle.
+	 */
 	@Override
 	public String getModelName() {
-		return carObject.getModelName();
+		return vehicleModel.getModelName();
 	}
 
+	/**Returns the current speed of the vehicle.
+	 * @return The current speed of the vehicle.
+	 */
 	@Override
 	public double getCurrentSpeed() {
-		return carObject.getCurrentSpeed();
+		return vehicleModel.getCurrentSpeed();
 	}
 
+	/**Returns the color of the vehicle.
+	 * @return The color of the vehicle.
+	 */
 	@Override
 	public Color getColor() {
-		return carObject.getColor();
+		return vehicleModel.getColor();
 	}
 
+	/**Returns the vehicle's current position as a Point.
+	 * @return The vehicle's current position as a Point.
+	 */
 	@Override
 	public Point getPosition() {
-		return carObject.getPosition();
+		return vehicleModel.getPosition();
 	}
 
+	/**Return the vehicle's current heading in radians.
+	 * @return The vehicle's current heading in radians.
+	 */
 	@Override
 	public double getHeading() {
-		return carObject.getHeading();
+		return vehicleModel.getHeading();
 	}
 
+	/**
+	 * Sets the color of the vehicle.
+	 * @param clr color which is to be set.
+	 */
 	@Override
 	public void setColor(Color color) {
-		carObject.setColor(color);
+		vehicleModel.setColor(color);
 	}
 
+	/** Sets the position of the vehicle
+	 * @param position The position to be set.
+	 */
 	@Override
 	public void setPosition(Point position) {
-		carObject.setPosition(position);
+		vehicleModel.setPosition(position);
 	}
 
+	/**
+	 * Increases the speed of the vehicle up to a maximum limit of the vehicle's engine power.
+	 * @param amount The factor by which the vehicle will increase its speed.
+	 */
 	@Override
 	public void incrementSpeed(double amount) {
-		carObject.incrementSpeed(amount);
+		vehicleModel.incrementSpeed(amount);
 	}
 
+	/**
+	 * Decreases the speed of the vehicle down to a minimum of zero.
+	 * @param amount The factor by which the vehicle will decrease its speed.
+	 */
 	@Override
 	public void decrementSpeed(double amount) {
-		carObject.decrementSpeed(amount);
+		vehicleModel.decrementSpeed(amount);
 	}
 
+	/**
+	 * Increases the speed of the vehicle.
+	 * @param amount The factor of the increase. Must be in the interval [0, 1].
+	 * @throws RuntimeException If the input is not within the interval [0, 1].
+	 */
 	@Override
-	public void gas(double amount) {
-		carObject.gas(amount);
+	public void gas(double amount) throws RuntimeException{
+		vehicleModel.gas(amount);
 	}
 
+	/**
+	 * Decreases the speed of the vehicle.
+	 * @param amount The factor of the decrease. Must be in the interval [0, 1].
+	 * @throws RuntimeException If the input is not within the interval [0, 1].
+	 */
 	@Override
-	public void brake(double amount) {
-		carObject.brake(amount);
+	public void brake(double amount)throws RuntimeException{
+		vehicleModel.brake(amount);
 	}
 
+	/**
+	 * Starts the vehicle by setting the variable currentspeed to a positive value.
+	 */
 	@Override
 	public void startEngine() {
-		carObject.startEngine();
+		vehicleModel.startEngine();
 	}
 
+	/**
+	 * Stops the vehicle by setting the variable currentspeed to zero.
+	 */
 	@Override
 	public void stopEngine() {
-		carObject.stopEngine();
+		vehicleModel.stopEngine();
 	}
 
+	/**
+	 * Implements the move method from the Movable interface. Changes the vehicle's position to a position further along the current heading by a distance determined by the vehicle's current speed.
+	 */
 	@Override
 	public void move() {
-		carObject.move();
+		vehicleModel.move();
 	}
 
+	/**
+	 * Implements the turnLeft method from the Movable interface. Changes the vehicle's heading by half a radian to the left.
+	 */
 	@Override
 	public void turnLeft() {
-		carObject.turnLeft();
+		vehicleModel.turnLeft();
 	}
 
+	/**
+	 * Implements the turnRight method from the Movable interface. Changes the vehicle's heading by half a radian to the right.
+	 */
 	@Override
 	public void turnRight() {
-		carObject.turnRight();
+		vehicleModel.turnRight();
 	}
 
 	@Override
 	public String toString() {
-		return carObject.toString();
+		return vehicleModel.toString();
 	}
 }
 

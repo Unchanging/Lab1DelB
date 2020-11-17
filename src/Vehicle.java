@@ -1,134 +1,115 @@
 import java.awt.*;
-import java.util.Iterator;
 
-public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehicle, Storer<typeOfVehicle> {
+public class Vehicle {
 
-	private UnitStorage<typeOfVehicle> vehicleStorage;
-	private Vehicle vehicleModel;
+	private double enginePower; // Engine power of the vehicle
+	private double currentSpeed; // The current speed of the vehicle
+	private Color color; // Color of the vehicle
+	private Point position; // current position
+	private double heading; // current heading in radians
 
-	public Ferry(int maxNrOfVehicles) {
-		vehicleStorage = new UnitStorage<>(maxNrOfVehicles);
-		vehicleModel = new Vehicle(this, Color.GREEN, 40, "M/V Boaty McBoatface");
-
-	}
+	private String modelName; // The vehicle model name
+	private GeneralVehicle generalVehicle;
 
 	/**
-	 * Increases the speed of the vehicle.
-	 * @param amount The factor of the increase. Must be in the interval [0, 1].
-	 * @throws RuntimeException If the input is not within the interval [0, 1].
+	 * A constructor used by the constructor of specific vehicles to model the behaviours of those vehicles
 	 */
-	@Override
-	public void gas(double amount) throws RuntimeException{
-		vehicleModel.gas(amount);
-	}
+	public Vehicle(GeneralVehicle generalVehicle, Color color, double enginePower, String modelName) {
 
-	@Override
-	public void addUnit(typeOfVehicle vehicle) {
-		if (getPosition().distance(vehicle.getPosition()) > 10)
-			throw new RuntimeException("The vehicle is too far away from the ferry to be loaded. Max distance is 10 units");
-		vehicleStorage.addUnit(vehicle);
-	}
+		this.generalVehicle = generalVehicle;
 
-	@Override
-	public typeOfVehicle unloadUnit() {
-		typeOfVehicle tempVehicle = vehicleStorage.unloadFirstUnit();
-		Point tempPosition = getPosition();
-		tempPosition.translate(5, 5);
-		tempVehicle.setPosition(tempPosition);
-		return tempVehicle;
-	}
+		this.color = color;
+		this.enginePower = enginePower;
+		this.modelName = modelName;
 
-	@Override
-	public Iterator<typeOfVehicle> getIterator() {
-		return vehicleStorage.getIterator();
-	}
-
-	@Override
-	public int getNrOfUnits() {
-		return vehicleStorage.getNrOfUnits();
-	}
-
-	@Override
-	public double speedFactor() {
-		return vehicleModel.getEnginePower() * 0.002;
+		position = new Point();
+		heading = 0;
 	}
 
 	/**Returns the engine power of the vehicle.
 	 * @return The engine power of the vehicle.
 	 */
-	@Override
 	public double getEnginePower(){
-		return vehicleModel.getEnginePower();
+		return enginePower;
 	}
-
 
 	/** Returns the model name of the vehicle.
 	 * @return The model name of the vehicle.
 	 */
-	@Override
 	public String getModelName() {
-		return vehicleModel.getModelName();
+		return modelName;
 	}
-
 
 	/**Returns the current speed of the vehicle.
 	 * @return The current speed of the vehicle.
 	 */
-	@Override
 	public double getCurrentSpeed(){
-		return vehicleModel.getCurrentSpeed();
+		return currentSpeed;
 	}
-
 
 	/**Returns the color of the vehicle.
 	 * @return The color of the vehicle.
 	 */
-	@Override
 	public Color getColor(){
-		return vehicleModel.getColor();
+		return color;
 	}
 
 	/**
 	 * Sets the color of the vehicle.
 	 * @param clr color which is to be set.
 	 */
-	@Override
 	public void setColor(Color clr){
-		vehicleModel.setColor(clr);
+		color = clr;
+	}
+
+	/** Sets the speed of the vehicle
+	 * @param speed The speed of the vehicle
+	 */
+	public void setCurrentSpeed(double speed) {
+		currentSpeed = speed;
 	}
 
 	/**
 	 * Starts the vehicle by setting the variable currentspeed to a positive value.
 	 */
-	@Override
 	public void startEngine(){
-		vehicleModel.startEngine();
+		generalVehicle.incrementSpeed(0.1);
 	}
 
 	/**
 	 * Stops the vehicle by setting the variable currentspeed to zero.
 	 */
-	@Override
 	public void stopEngine(){
-		vehicleModel.stopEngine();
+		currentSpeed = 0;
 	}
 
 	/**
 	 * Increases the speed of the vehicle up to a maximum limit of the vehicle's engine power.
 	 * @param amount The factor by which the vehicle will increase its speed.
 	 */
-	@Override
 	public void incrementSpeed(double amount) {
-		vehicleModel.incrementSpeed(amount);
+		currentSpeed = Math.min(getCurrentSpeed() + generalVehicle.speedFactor() * amount, enginePower);
 	}
 
 	/**
 	 * Decreases the speed of the vehicle down to a minimum of zero.
 	 * @param amount The factor by which the vehicle will decrease its speed.
 	 */
-	@Override
 	public void decrementSpeed(double amount) {
-		vehicleModel.decrementSpeed(amount);
+		currentSpeed = Math.max(getCurrentSpeed() - generalVehicle.speedFactor() * amount, 0);
+	}
+
+
+	/**
+	 * Increases the speed of the vehicle.
+	 * @param amount The factor of the increase. Must be in the interval [0, 1].
+	 * @throws RuntimeException If the input is not within the interval [0, 1].
+	 */
+	public void gas(double amount) throws RuntimeException{
+		if (amount <= 1 && amount >= 0)
+			generalVehicle.incrementSpeed(amount);
+		else
+			throw new RuntimeException("input was not in interval [0, 1]");
 	}
 
 	/**
@@ -136,60 +117,55 @@ public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehic
 	 * @param amount The factor of the decrease. Must be in the interval [0, 1].
 	 * @throws RuntimeException If the input is not within the interval [0, 1].
 	 */
-	@Override
 	public void brake(double amount) throws RuntimeException{
-		vehicleModel.brake(amount);
+		if (amount <= 1 && amount >= 0)
+			decrementSpeed(amount);
+		else
+			throw new RuntimeException("input was not in interval [0, 1]");
 	}
 
 	/**Returns the vehicle's current position as a Point.
 	 * @return The vehicle's current position as a Point.
 	 */
-	@Override
 	public Point getPosition(){
-		return vehicleModel.getPosition();
+		return position.getLocation();
 	}
 
 	public void setPosition(Point position) {
-		vehicleModel.setPosition(position);
+		this.position = position.getLocation();
 	}
 
 	/**Return the vehicle's current heading in radians.
 	 * @return The vehicle's current heading in radians.
 	 */
-	@Override
 	public double getHeading() {
-		return vehicleModel.getHeading();
+		return heading;
 	}
 
 	/**
 	 * Implements the move method from the Movable interface. Changes the vehicle's position to a position further along the current heading by a distance determined by the vehicle's current speed.
 	 */
-	@Override
 	public void move() {
-		vehicleModel.move();
-		vehicleStorage.updatePositions(this.getPosition());
+		position.translate((int)(Math.cos(heading)*getCurrentSpeed()), (int)(Math.sin(heading)*getCurrentSpeed()));
 	}
 
 
 	/**
 	 * Implements the turnLeft method from the Movable interface. Changes the vehicle's heading by half a radian to the left.
 	 */
-
-	@Override
 	public void turnLeft() {
-		vehicleModel.turnLeft();
+		heading += 0.5;
 	}
 
 	/**
 	 * Implements the turnRight method from the Movable interface. Changes the vehicle's heading by half a radian to the right.
 	 */
-	@Override
 	public void turnRight() {
-		vehicleModel.turnRight();
+		heading -= 0.5;
 	}
 
-	@Override
 	public String toString() {
-		return vehicleModel.toString();
+		return this.getModelName() + " at X=" + this.getPosition().getX() + ",Y=" + this.getPosition().getY()+ " with velocity " + this.getCurrentSpeed();
 	}
+
 }
