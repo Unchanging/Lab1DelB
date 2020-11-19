@@ -28,7 +28,6 @@ public class CarTransport implements Truck, Storer<Car> {
 		return vehicleModel.getEnginePower() * 0.004;
 	}
 
-
 	/**
 	 * Raises the ramp
 	 */
@@ -53,7 +52,6 @@ public class CarTransport implements Truck, Storer<Car> {
 		return rampIsDown;
 	}
 
-
 	/** Places a car on the truck
 	 * @param vehicle The car to be placed in on the truck
 	 * @throws RuntimeException Throws exceptions if the ramp is not down or the car is too far away
@@ -62,7 +60,7 @@ public class CarTransport implements Truck, Storer<Car> {
 
 		if (!isRampIsDown())
 			throw new RuntimeException("Cars can not be loaded while the ramp is not lowered.");
-		if (getPosition().distance(vehicle.getPosition()) > 10)
+		if (this.getPosition().distance(vehicle.getPosition()) > 10)
 			throw new RuntimeException("The car is too far away from the transport to be loaded. Max distance is 10 units");
 		vehicleStorage.addUnit(vehicle);
 

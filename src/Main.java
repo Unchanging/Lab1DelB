@@ -11,12 +11,10 @@ public class Main {
 
 		Scania scania = new Scania();
 
-		LargeFerry<GeneralVehicle>largeFerry = new LargeFerry<>(4, 10);
+		Ferry<Saab95> ferry = new Ferry<>(10);
 
-		largeFerry.addUnit(0, saab1);
-		largeFerry.addUnit(1, scania);
+		ferry.addUnit(saab);
 
-		System.out.println(largeFerry.unloadUnit(0));
 
 	}
 }

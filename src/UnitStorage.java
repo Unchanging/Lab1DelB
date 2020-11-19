@@ -10,7 +10,7 @@ public class UnitStorage<typeOfUnit extends Transportable> implements Transporte
 
 	public UnitStorage(int maxNrOfUnits) {
 		this.maxNrOfUnits = maxNrOfUnits;
-		listOfUnits = new LinkedList<typeOfUnit>();
+		listOfUnits = new LinkedList<>();
 	}
 
 	public void addUnit(typeOfUnit unit) {

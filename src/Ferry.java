@@ -1,11 +1,18 @@
 import java.awt.*;
 import java.util.Iterator;
 
+/**A class which models a ferry which can carry vehicles that implements the GeneralVehicle interface.
+ * Specific kind of vehicle can be set by generics to classes which implement GeneralVehicle.
+ * @param <typeOfVehicle> The kind of vehicle this ferry should carry.
+ */
 public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehicle, Storer<typeOfVehicle> {
 
 	private UnitStorage<typeOfVehicle> vehicleStorage;
 	private Vehicle vehicleModel;
 
+	/** Constructor for the ferry.
+	 * @param maxNrOfVehicles Sets the number of vehicle which the ferry can store.
+	 */
 	public Ferry(int maxNrOfVehicles) {
 		vehicleStorage = new UnitStorage<>(maxNrOfVehicles);
 		vehicleModel = new Vehicle(this, Color.GREEN, 40, "M/V Boaty McBoatface");
@@ -22,6 +29,9 @@ public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehic
 		vehicleModel.gas(amount);
 	}
 
+	/**Adds a vehicle to the ferry
+	 * @param vehicle The Vehicle to be stored on the ferry
+	 */
 	@Override
 	public void addUnit(typeOfVehicle vehicle) {
 		if (getPosition().distance(vehicle.getPosition()) > 10)
@@ -29,6 +39,9 @@ public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehic
 		vehicleStorage.addUnit(vehicle);
 	}
 
+	/** Removes and returns the first loaded vehicle on the ferry.
+	 * @return The offloaded vehicle
+	 */
 	@Override
 	public typeOfVehicle unloadUnit() {
 		typeOfVehicle tempVehicle = vehicleStorage.unloadFirstUnit();
@@ -38,11 +51,18 @@ public class Ferry<typeOfVehicle extends GeneralVehicle> implements GeneralVehic
 		return tempVehicle;
 	}
 
+	/** Returns an iterator of the vehicles on the ferry.
+	 * The iterator is made unmodifiable and calls to .remove() will not work
+	 * @return An iterator of the vehicles on the ferry
+	 */
 	@Override
 	public Iterator<typeOfVehicle> getIterator() {
 		return vehicleStorage.getIterator();
 	}
 
+	/**Returns the number of vehicles currently on the ferry.
+	 * @return the number of vehicle currently on the ferry.
+	 */
 	@Override
 	public int getNrOfUnits() {
 		return vehicleStorage.getNrOfUnits();
