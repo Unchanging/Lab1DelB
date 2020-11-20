@@ -13,6 +13,9 @@ public class UnitStorage<typeOfUnit extends Transportable> implements Transporte
 		listOfUnits = new LinkedList<>();
 	}
 
+	/**Stores a unit if there is space left.
+	 * @param unit The unit which is to be stored.
+	 */
 	public void addUnit(typeOfUnit unit) {
 		if (listOfUnits.size() < maxNrOfUnits)
 			listOfUnits.add(unit);
@@ -20,12 +23,18 @@ public class UnitStorage<typeOfUnit extends Transportable> implements Transporte
 			throw new RuntimeException("The storage is full and can not add another Unit");
 	}
 
+	/**Removes and returns the last loaded unit from storage.
+	 * @return The unit which was loaded last
+	 */
 	public typeOfUnit unloadLastUnit(){
 		typeOfUnit unit = listOfUnits.getLast();
 		listOfUnits.remove(unit);
 		return unit;
 	}
 
+	/**Removes and returns the first loaded unit from storage.
+	 * @return The unit which was loaded first
+	 */
 	public typeOfUnit unloadFirstUnit(){
 		typeOfUnit unit = listOfUnits.getFirst();
 		listOfUnits.remove(unit);

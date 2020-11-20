@@ -11,8 +11,11 @@ public class Vehicle {
 	private String modelName; // The vehicle model name
 	private GeneralVehicle generalVehicle;
 
-	/**
-	 * A constructor used by the constructor of specific vehicles to model the behaviours of those vehicles
+	/**A constructor used by the constructor of specific vehicles to model the behaviours of those vehicles
+	 * @param generalVehicle The vehicle which used the RoadVehicle model
+	 * @param color The color of the vehicle
+	 * @param enginePower The power of the vehicle's engine
+	 * @param modelName The model name of the vehicle
 	 */
 	public Vehicle(GeneralVehicle generalVehicle, Color color, double enginePower, String modelName) {
 
